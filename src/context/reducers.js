@@ -105,15 +105,18 @@ export const cpu_ships = (
         id: 6,
         name: "carrier",
         spaces: 4,
-        direction: directions[Math.floor(Math.random() * directions.length)],
+        direction:
+          "x" /* directions[Math.floor(Math.random() * directions.length)] */,
         cells: [],
+        icon: "GiCarrier",
         /* state: "safe", */
       },
       {
         id: 7,
         name: "cruiser",
         spaces: 3,
-        direction: directions[Math.floor(Math.random() * directions.length)],
+        direction:
+          "x1" /* directions[Math.floor(Math.random() * directions.length)] */,
         cells: [],
         /* state: "safe", */
       },
@@ -121,7 +124,8 @@ export const cpu_ships = (
         id: 8,
         name: "cruiser",
         spaces: 3,
-        direction: directions[Math.floor(Math.random() * directions.length)],
+        direction:
+          "x2" /* directions[Math.floor(Math.random() * directions.length)] */,
         cells: [],
         /* state: "safe", */
       },
@@ -129,7 +133,8 @@ export const cpu_ships = (
         id: 9,
         name: "cruiser",
         spaces: 3,
-        direction: directions[Math.floor(Math.random() * directions.length)],
+        direction:
+          "x3" /* directions[Math.floor(Math.random() * directions.length)] */,
         cells: [],
         /* state: "safe", */
       },
@@ -137,7 +142,8 @@ export const cpu_ships = (
         id: 10,
         name: "submarine",
         spaces: 2,
-        direction: directions[Math.floor(Math.random() * directions.length)],
+        direction:
+          "x" /* directions[Math.floor(Math.random() * directions.length)] */,
         cells: [],
         /* state: "safe", */
       },

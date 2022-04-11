@@ -1,0 +1,36 @@
+.ship {
+  font-size: 1.2rem;
+  text-align: start;
+  border: solid;
+  border-color: grey;
+  font-weight: bold;
+  color: white;
+  border-radius: 1.5ch;
+}
+
+.ship:hover {
+  background-color: white;
+  font-size: 2rem;
+  width: 300px;
+}
+
+.carrier {
+  width: 270px;
+  background-color: rgb(75, 90, 141);
+}
+
+.cruiser {
+  width: 200px;
+  background-color: rgb(176, 84, 56);
+}
+
+.submarine {
+  width: 120px;
+  background-color: rgb(172, 173, 61);
+}
+.direction {
+  font-size: 1.2rem;
+  background-color: rgb(162, 162, 134);
+  border: gray;
+  color: black;
+}

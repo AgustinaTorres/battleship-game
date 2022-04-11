@@ -7,6 +7,18 @@ function Grid(props) {
       .fill()
       .map((el, i) => i)
   );
+
+  const {
+    gameStatus,
+    destroyedCell,
+    userTurn,
+    cells,
+    cpuCells,
+    userCells,
+    waterCells,
+    hittenCells,
+  } = props;
+
   return (
     <div class="grid  my-2 ">
       <table class="table bg-secondary table-bordered text-center">
@@ -17,10 +29,24 @@ function Grid(props) {
                 return (
                   <td
                     class={
-                      props.cells && props.cells.includes(grid)
-                        ? props.colorCell
-                        : props.waterCells && props.waterCells.includes(grid)
-                        ? "table-primary"
+                      cells && cells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : cpuCells &&
+                          cpuCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : userCells &&
+                          userCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : waterCells &&
+                          waterCells.filter((cell) => cell === grid).length > 0
+                        ? "table-info"
+                        : hittenCells &&
+                          hittenCells.filter((cell) => cell === grid).length > 0
+                        ? "table-danger"
+                        : destroyedCell &&
+                          destroyedCell.filter((cell) => cell === grid).length >
+                            0
+                        ? "table-dark"
                         : "cell"
                     }
                     key={grid}
@@ -39,10 +65,24 @@ function Grid(props) {
                 return (
                   <td
                     class={
-                      props.cells && props.cells.includes(grid)
-                        ? props.colorCell
-                        : props.waterCells && props.waterCells.includes(grid)
-                        ? "table-primary"
+                      cells && cells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : cpuCells &&
+                          cpuCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : userCells &&
+                          userCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : waterCells &&
+                          waterCells.filter((cell) => cell === grid).length > 0
+                        ? "table-info"
+                        : hittenCells &&
+                          hittenCells.filter((cell) => cell === grid).length > 0
+                        ? "table-danger"
+                        : destroyedCell &&
+                          destroyedCell.filter((cell) => cell === grid).length >
+                            0
+                        ? "table-dark"
                         : "cell"
                     }
                     key={grid}
@@ -61,10 +101,24 @@ function Grid(props) {
                 return (
                   <td
                     class={
-                      props.cells && props.cells.includes(grid)
-                        ? props.colorCell
-                        : props.waterCells && props.waterCells.includes(grid)
-                        ? "table-primary"
+                      cells && cells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : cpuCells &&
+                          cpuCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : userCells &&
+                          userCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : waterCells &&
+                          waterCells.filter((cell) => cell === grid).length > 0
+                        ? "table-info"
+                        : hittenCells &&
+                          hittenCells.filter((cell) => cell === grid).length > 0
+                        ? "table-danger"
+                        : destroyedCell &&
+                          destroyedCell.filter((cell) => cell === grid).length >
+                            0
+                        ? "table-dark"
                         : "cell"
                     }
                     key={grid}
@@ -83,10 +137,24 @@ function Grid(props) {
                 return (
                   <td
                     class={
-                      props.cells && props.cells.includes(grid)
-                        ? props.colorCell
-                        : props.waterCells && props.waterCells.includes(grid)
-                        ? "table-primary"
+                      cells && cells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : cpuCells &&
+                          cpuCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : userCells &&
+                          userCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : waterCells &&
+                          waterCells.filter((cell) => cell === grid).length > 0
+                        ? "table-info"
+                        : hittenCells &&
+                          hittenCells.filter((cell) => cell === grid).length > 0
+                        ? "table-danger"
+                        : destroyedCell &&
+                          destroyedCell.filter((cell) => cell === grid).length >
+                            0
+                        ? "table-dark"
                         : "cell"
                     }
                     key={grid}
@@ -105,10 +173,24 @@ function Grid(props) {
                 return (
                   <td
                     class={
-                      props.cells && props.cells.includes(grid)
-                        ? props.colorCell
-                        : props.waterCells && props.waterCells.includes(grid)
-                        ? "table-primary"
+                      cells && cells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : cpuCells &&
+                          cpuCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : userCells &&
+                          userCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : waterCells &&
+                          waterCells.filter((cell) => cell === grid).length > 0
+                        ? "table-info"
+                        : hittenCells &&
+                          hittenCells.filter((cell) => cell === grid).length > 0
+                        ? "table-danger"
+                        : destroyedCell &&
+                          destroyedCell.filter((cell) => cell === grid).length >
+                            0
+                        ? "table-dark"
                         : "cell"
                     }
                     key={grid}
@@ -127,10 +209,24 @@ function Grid(props) {
                 return (
                   <td
                     class={
-                      props.cells && props.cells.includes(grid)
-                        ? props.colorCell
-                        : props.waterCells && props.waterCells.includes(grid)
-                        ? "table-primary"
+                      cells && cells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : cpuCells &&
+                          cpuCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : userCells &&
+                          userCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : waterCells &&
+                          waterCells.filter((cell) => cell === grid).length > 0
+                        ? "table-info"
+                        : hittenCells &&
+                          hittenCells.filter((cell) => cell === grid).length > 0
+                        ? "table-danger"
+                        : destroyedCell &&
+                          destroyedCell.filter((cell) => cell === grid).length >
+                            0
+                        ? "table-dark"
                         : "cell"
                     }
                     key={grid}
@@ -149,10 +245,24 @@ function Grid(props) {
                 return (
                   <td
                     class={
-                      props.cells && props.cells.includes(grid)
-                        ? props.colorCell
-                        : props.waterCells && props.waterCells.includes(grid)
-                        ? "table-primary"
+                      cells && cells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : cpuCells &&
+                          cpuCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : userCells &&
+                          userCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : waterCells &&
+                          waterCells.filter((cell) => cell === grid).length > 0
+                        ? "table-info"
+                        : hittenCells &&
+                          hittenCells.filter((cell) => cell === grid).length > 0
+                        ? "table-danger"
+                        : destroyedCell &&
+                          destroyedCell.filter((cell) => cell === grid).length >
+                            0
+                        ? "table-dark"
                         : "cell"
                     }
                     key={grid}
@@ -171,10 +281,24 @@ function Grid(props) {
                 return (
                   <td
                     class={
-                      props.cells && props.cells.includes(grid)
-                        ? props.colorCell
-                        : props.waterCells && props.waterCells.includes(grid)
-                        ? "table-primary"
+                      cells && cells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : cpuCells &&
+                          cpuCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : userCells &&
+                          userCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : waterCells &&
+                          waterCells.filter((cell) => cell === grid).length > 0
+                        ? "table-info"
+                        : hittenCells &&
+                          hittenCells.filter((cell) => cell === grid).length > 0
+                        ? "table-danger"
+                        : destroyedCell &&
+                          destroyedCell.filter((cell) => cell === grid).length >
+                            0
+                        ? "table-dark"
                         : "cell"
                     }
                     key={grid}
@@ -193,10 +317,24 @@ function Grid(props) {
                 return (
                   <td
                     class={
-                      props.cells && props.cells.includes(grid)
-                        ? props.colorCell
-                        : props.waterCells && props.waterCells.includes(grid)
-                        ? "table-primary"
+                      cells && cells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : cpuCells &&
+                          cpuCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : userCells &&
+                          userCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : waterCells &&
+                          waterCells.filter((cell) => cell === grid).length > 0
+                        ? "table-info"
+                        : hittenCells &&
+                          hittenCells.filter((cell) => cell === grid).length > 0
+                        ? "table-danger"
+                        : destroyedCell &&
+                          destroyedCell.filter((cell) => cell === grid).length >
+                            0
+                        ? "table-dark"
                         : "cell"
                     }
                     key={grid}
@@ -215,10 +353,24 @@ function Grid(props) {
                 return (
                   <td
                     class={
-                      props.cells && props.cells.includes(grid)
-                        ? props.colorCell
-                        : props.waterCells && props.waterCells.includes(grid)
-                        ? "table-primary"
+                      cells && cells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : cpuCells &&
+                          cpuCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : userCells &&
+                          userCells.filter((cell) => cell === grid).length > 0
+                        ? "table-secondary"
+                        : waterCells &&
+                          waterCells.filter((cell) => cell === grid).length > 0
+                        ? "table-info"
+                        : hittenCells &&
+                          hittenCells.filter((cell) => cell === grid).length > 0
+                        ? "table-danger"
+                        : destroyedCell &&
+                          destroyedCell.filter((cell) => cell === grid).length >
+                            0
+                        ? "table-dark"
                         : "cell"
                     }
                     key={grid}
@@ -234,7 +386,13 @@ function Grid(props) {
         </tbody>
       </table>
       <div>
-        <h5>{props.userName} BOARD</h5>
+        <h5>
+          {gameStatus === "pending"
+            ? null
+            : userTurn
+            ? "YOUR TURN!"
+            : "Wait...CPU is playing"}
+        </h5>
       </div>
     </div>
   );

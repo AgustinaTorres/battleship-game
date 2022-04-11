@@ -111,17 +111,18 @@ const StartLayout = (props) => {
   return (
     <div class=" container ">
       <div class="d-flex justify-content-center ">
-        <div class="mx-5">
-          <h1>BattleShip Game</h1>
+        <div class="mx-5 my-3">
+          <h1>BATTLESHIP GAME</h1>
         </div>
         <div>
           <GiSinkingShip class="big-icon" />
         </div>
       </div>
       <Grid
-        cells={cells}
+        userCells={cells}
         onClickGridAction={setShipOnGrid}
         colorCell="table-primary"
+        gameStatus={props.game_status}
       />
       <div class="elements">
         <Ships
@@ -143,6 +144,7 @@ const mapStateToProps = (state) => {
   return {
     user_ships: state.user_ships,
     user_name: state.game.user_name,
+    game_status: state.game.game_status,
   };
 };
 

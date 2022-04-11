@@ -2,15 +2,23 @@ import React from "react";
 import { connect } from "react-redux";
 import { useState, useEffect } from "react";
 import Grid from "../../components/commons/Grid";
+import { scryRenderedComponentsWithType } from "react-dom/test-utils";
 
 function Game(props) {
   const [userShips, setUserShips] = useState();
   const [userShipsCells, setUserShipsCells] = useState();
+  const [waterShipCells, setWaterShipsCells] = useState([]);
+  const [hittenShipCells, setHittenShipsCells] = useState([]);
+  const [destroyedShipCells, setDestroyedShipCells] = useState([]);
+
   const [cpuShips, setCpuShips] = useState();
   const [cpuShipCells, setCpuShipsCells] = useState();
-  const [waterCpuShipCells, setWaterCpuShipsCells] = useState();
-  const [hittenCpuShipCells, setHittenCpuShipsCells] = useState();
+  const [waterCpuShipCells, setWaterCpuShipsCells] = useState([]);
+  const [hittenCpuShipCells, setHittenCpuShipsCells] = useState([]);
+  const [destroyedCpuCells, setDestroyedCpuCells] = useState([]);
+
   const [userTurn, setUserTurn] = useState(true);
+  const [cpuTurn, setCpuTurn] = useState(false);
 
   useEffect(() => {
     let user_cells = [];
@@ -38,11 +46,14 @@ function Game(props) {
         }
       } else if (cpuShip.name === "cruiser") {
         switch (cpuShip.direction) {
-          case "x":
-            cpu_cells.push([3, 3 + 1, 3 + 2]);
+          case "x1":
+            cpu_cells.push([92, 92 + 1, 92 + 2]);
             break;
-          case "y":
-            cpu_cells.push([4, 4 + 10, 4 + 20]);
+          case "x2":
+            cpu_cells.push([35, 35 + 1, 35 + 2]);
+            break;
+          case "x3":
+            cpu_cells.push([81, 81 + 1, 81 + 2]);
             break;
           default:
         }
@@ -52,7 +63,7 @@ function Game(props) {
             cpu_cells.push([5, 5 + 1]);
             break;
           case "y":
-            cpu_cells.push([5, 5 + 10]);
+            cpu_cells.push([6, 6 + 10]);
             break;
           default:
         }
@@ -64,30 +75,98 @@ function Game(props) {
     setCpuShipsCells(cpu_cells);
   }, []);
 
+  if (destroyedCpuCells.length >= 5) {
+    alert("GANASSSSSSSSSSSSSSSTE!!");
+  }
+  if (cpuTurn) {
+    setTimeout(() => {
+      setUserTurn(!userTurn);
+      setCpuTurn(!cpuTurn);
+    }, 1000);
+  }
+
   const dropBombToCpu = (grid) => {
-    let newCpuShipCells = [];
-    let newWaterCpuShipCells = [];
-    let newHittenCpuShipCells = [];
+    console.log("hitten", hittenCpuShipCells);
+    console.log("water", waterCpuShipCells);
 
-    let arr = [];
-    cpuShipCells.forEach((array) => {
-      arr = arr.concat(array);
-    });
-    console.log("holaaaaaaaaaaa", arr);
+    let arrayOfArraysIndex = cpuShipCells.findIndex((cellArray) =>
+      cellArray.includes(grid)
+    );
 
-    if (arr.includes(grid)) {
-      newHittenCpuShipCells.push(grid);
-      newCpuShipCells.push(arr.splice(arr.indexOf(grid), 1));
+    let findedArray = cpuShipCells.find((array, index) => array.includes(grid));
+
+    if (findedArray && findedArray.length > 0) {
+      if (findedArray.length > 1) {
+        let arrayIndex = findedArray.findIndex((x) => x === grid);
+        let newCpuShipCells = [...cpuShipCells];
+        newCpuShipCells[arrayOfArraysIndex] = findedArray.filter((n, index) => {
+          return index !== arrayIndex;
+        });
+
+        let newHittenCpuShipCells = [...hittenCpuShipCells];
+        newHittenCpuShipCells.push(grid);
+        setHittenCpuShipsCells(newHittenCpuShipCells);
+
+        setCpuShipsCells(newCpuShipCells);
+      } else {
+        let newDestroyedCpuCells = [...destroyedCpuCells];
+        newDestroyedCpuCells.push(grid);
+        setDestroyedCpuCells(newDestroyedCpuCells);
+      }
     } else {
+      let newWaterCpuShipCells = [...waterCpuShipCells];
       newWaterCpuShipCells.push(grid);
+      setWaterCpuShipsCells(newWaterCpuShipCells);
     }
 
-    setCpuShipsCells(newCpuShipCells);
-    setWaterCpuShipsCells(newWaterCpuShipCells);
-    setHittenCpuShipsCells(newHittenCpuShipCells);
-    /* setUserTurn(!userTurn); */
-    console.log("water", waterCpuShipCells);
-    console.log("hitten", hittenCpuShipCells);
+    /*  let cpuBomb = "";
+
+    if (hittenShipCells.length > 0 && [...hittenShipCells].pop() < 99) {
+      cpuBomb = [...hittenShipCells].pop() + 1;
+    } else {
+      cpuBomb = Math.round(Math.random() * (99 - 0 + 1));
+    } */
+    let cpuBomb = Math.round(Math.random() * (99 - 0 + 1));
+    setUserTurn(!userTurn);
+    dropBombToUser(cpuBomb);
+  };
+
+  const dropBombToUser = (grid) => {
+    let arrayOfArraysIndex = userShipsCells.findIndex((cellArray) =>
+      cellArray.includes(grid)
+    );
+
+    let findedArray = userShipsCells.find((array, index) =>
+      array.includes(grid)
+    );
+
+    if (findedArray && findedArray.length > 0) {
+      if (findedArray.length > 1) {
+        let arrayIndex = findedArray.findIndex((x) => x === grid);
+        let newUserShipCells = [...userShipsCells];
+        newUserShipCells[arrayOfArraysIndex] = findedArray.filter(
+          (n, index) => {
+            return index !== arrayIndex;
+          }
+        );
+
+        let newHittenShipCells = [...hittenShipCells];
+        newHittenShipCells.push(grid);
+        setHittenShipsCells(newHittenShipCells);
+
+        setUserShipsCells(newUserShipCells);
+      } else {
+        let newDestroyedShipCells = [...destroyedShipCells];
+        newDestroyedShipCells.push(grid);
+        setDestroyedCpuCells(newDestroyedShipCells);
+      }
+    } else {
+      let newWaterShipCells = [...waterShipCells];
+      newWaterShipCells.push(grid);
+      setWaterShipsCells(newWaterShipCells);
+    }
+
+    setCpuTurn(!cpuTurn);
   };
 
   return (
@@ -99,21 +178,27 @@ function Game(props) {
         {userTurn ? (
           <div class=" d-flex justify-content-end">
             <Grid
-              cells={cpuShipCells}
+              cpuCells={cpuShipCells}
               waterCells={waterCpuShipCells}
               hittenCells={hittenCpuShipCells}
-              /* colorCell="table-warning" */
+              destroyedCell={destroyedCpuCells}
               userName="CPU"
               onClickGridAction={dropBombToCpu}
+              userTurn={userTurn}
+              gameStatus={props.game_status}
             />
           </div>
         ) : (
           <div class=" d-flex justify-content-start">
             <Grid
               cells={userShipsCells}
-              colorCell="table-primary"
+              waterCells={waterShipCells}
+              hittenCells={hittenShipCells}
+              destroyedCell={destroyedShipCells}
               userName={props.user_name}
-              onClickGridAction={null}
+              onClickGridAction={dropBombToUser}
+              userTurn={userTurn}
+              gameStatus={props.game_status}
             />
           </div>
         )}
@@ -127,6 +212,7 @@ const mapStateToProps = (state) => {
     user_ships: state.user_ships,
     cpu_ships: state.cpu_ships,
     user_name: state.game.user_name,
+    game_status: state.game.game_status,
   };
 };
 export default connect(mapStateToProps)(Game);
