@@ -10,39 +10,41 @@ function Ships(props) {
           Select your ships and set them on the Grid...
         </h3>
       </div>
-      <div class="ships">
-        {props.ships && props.ships !== " "
-          ? props.ships.map((ship, index) => {
-              return (
-                <div class="row-4 d-flex justify-content-between">
-                  <button
-                    type="button"
-                    class={
-                      ship.name === "carrier"
-                        ? "carrier btn btn-md mx-2 my-1 ship"
-                        : ship.name === "cruiser"
-                        ? "cruiser btn  btn-md mx-2 my-1 ship"
-                        : "submarine btn  btn-md mx-2 my-1 ship"
-                    }
-                    onClick={() => props.selectShip(ship.id, index)}
-                  >
-                    {ship.name}
-                  </button>
-
-                  <div class="row text-center">
+      <div class="ship-actions d-flex col">
+        <div class="ships">
+          {props.ships && props.ships !== " "
+            ? props.ships.map((ship, index) => {
+                return (
+                  <div class="row-4 d-flex justify-content-between">
                     <button
+                      disabled={props.activeShipId !== ship.id}
                       type="button"
-                      class="direction btn btn-secondary btn-sm mx-2 my-1 "
-                      onClick={() => props.changeShipDirection(ship.id, index)}
+                      class={
+                        ship.name === "carrier"
+                          ? "carrier btn btn-md mx-2 my-1 ship"
+                          : ship.name === "cruiser"
+                          ? "cruiser btn  btn-md mx-2 my-1 ship"
+                          : "submarine btn  btn-md mx-2 my-1 ship"
+                      }
+                      onClick={() => props.selectShip(ship.id, index)}
                     >
-                      {ship.direction === "x" ? "horizontal" : "vertical"}
+                      {ship.name + " " + ship.direction}
                     </button>
-                    <h5>Click to change direction</h5>
                   </div>
-                </div>
-              );
-            })
-          : null}
+                );
+              })
+            : null}
+        </div>
+        <div class="row text-center">
+          <button
+            type="button"
+            class="direction btn btn-secondary btn-sm mx-3 "
+            onClick={() => props.changeShipDirection(props.activeShipId)}
+          >
+            CHANGE SELECTED SHIP DIRECTION
+            {/*  {ship.direction === "x" ? "horizontal" : "vertical"} */}
+          </button>
+        </div>
       </div>
     </div>
   );

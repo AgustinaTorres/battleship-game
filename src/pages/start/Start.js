@@ -2,12 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import { useState, useEffect } from "react";
 import startGame from "../../context/actions";
-/* import { history } from "../../index"; */
 import "./Start.css";
 import Grid from "../../components/commons/Grid";
 import Ships from "../../components/customs/Ships";
 import Form from "../../components/customs/Form";
 import { GiSinkingShip } from "react-icons/gi";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const StartLayout = (props) => {
   const [ships, setShips] = useState();
@@ -15,13 +16,22 @@ const StartLayout = (props) => {
   const [activeShip, setActiveShip] = useState(false);
   const [cells, setCells] = useState([]);
   const [userName, setUserName] = useState("");
+  const [activeShipId, setActiveShipId] = useState(1);
+  const [disableStartButton, setDisableStartButton] = useState(true);
 
+  const navigate = useNavigate();
   useEffect(() => {
     console.log("USE_EFFECT");
     console.log("SHIPS", props.user_ships.items);
     setShips(props.user_ships.items);
     setUserName(props.user_name);
   }, []);
+
+  useEffect(() => {
+    if (userName !== "" && activeShipId === 6) {
+      setDisableStartButton(false);
+    }
+  }, [userName]);
 
   const changeShipDirection = (ship_id, index) => {
     const new_ships = ships.map((ship) => {
@@ -37,48 +47,53 @@ const StartLayout = (props) => {
   };
 
   const selectShip = (ship_id, index) => {
-    setActiveShip(!activeShip);
+    setActiveShip(true);
     const selected_ship = ships.find((ship) => ship.id === ship_id);
     setCurrentShip(selected_ship);
     console.log(currentShip);
   };
 
   const setShipOnGrid = (grid) => {
-    let currentShipCells = [];
-    if (currentShip.name === "carrier") {
-      switch (currentShip.direction) {
-        case "x":
-          currentShipCells.push(grid, grid + 1, grid + 2, grid + 3);
-          break;
-        case "y":
-          currentShipCells.push(grid, grid + 10, grid + 20, grid + 30);
-          break;
-        default:
+    if (activeShip) {
+      let currentShipCells = [];
+      if (currentShip.name === "carrier") {
+        switch (currentShip.direction) {
+          case "x":
+            currentShipCells.push(grid, grid + 1, grid + 2, grid + 3);
+            break;
+          case "y":
+            currentShipCells.push(grid, grid + 10, grid + 20, grid + 30);
+            break;
+          default:
+        }
+      } else if (currentShip.name === "cruiser") {
+        switch (currentShip.direction) {
+          case "x":
+            currentShipCells.push(grid, grid + 1, grid + 2);
+            break;
+          case "y":
+            currentShipCells.push(grid, grid + 10, grid + 20);
+            break;
+          default:
+        }
+      } else {
+        switch (currentShip.direction) {
+          case "x":
+            currentShipCells.push(grid, grid + 1);
+            break;
+          case "y":
+            currentShipCells.push(grid, grid + 10);
+            break;
+          default:
+        }
       }
-    } else if (currentShip.name === "cruiser") {
-      switch (currentShip.direction) {
-        case "x":
-          currentShipCells.push(grid, grid + 1, grid + 2);
-          break;
-        case "y":
-          currentShipCells.push(grid, grid + 10, grid + 20);
-          break;
-        default:
-      }
+      saveShipCells(currentShipCells);
+      setCells(cells.concat(currentShipCells));
+      setActiveShipId(activeShipId + 1);
+      setActiveShip(false);
+      console.log("ultimoooo barcoooo", typeof activeShipId);
     } else {
-      switch (currentShip.direction) {
-        case "x":
-          currentShipCells.push(grid, grid + 1);
-          break;
-        case "y":
-          currentShipCells.push(grid, grid + 10);
-          break;
-        default:
-      }
     }
-    saveShipCells(currentShipCells);
-    setCells(cells.concat(currentShipCells));
-    console.log("CELLS", cells);
   };
 
   const saveShipCells = (currentShipCells) => {
@@ -96,7 +111,7 @@ const StartLayout = (props) => {
 
   const handleChange = (e) => {
     setUserName(e.target.value);
-    console.log("USER_NAME", userName);
+    console.log("VALORESSSS", userName, activeShipId);
   };
 
   const startPlaying = () => {
@@ -105,7 +120,7 @@ const StartLayout = (props) => {
       userName,
     };
     props.onStartGame(data);
-    /*  history.push("/game"); */
+    navigate({ pathname: "/game" });
   };
 
   return (
@@ -129,11 +144,14 @@ const StartLayout = (props) => {
           ships={ships}
           selectShip={selectShip}
           changeShipDirection={changeShipDirection}
+          activeShipId={activeShipId}
         />
         <Form
           userName={userName}
           handleChange={handleChange}
           startPlaying={startPlaying}
+          activeShipId={activeShipId}
+          disableStartButton={disableStartButton}
         />
       </div>
     </div>

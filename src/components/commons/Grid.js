@@ -9,6 +9,7 @@ function Grid(props) {
   );
 
   const {
+    userName,
     gameStatus,
     destroyedCell,
     userTurn,
@@ -21,6 +22,7 @@ function Grid(props) {
 
   return (
     <div class="grid  my-2 ">
+      <h5>{userName && userName + " ships"}</h5>
       <table class="table bg-secondary table-bordered text-center">
         <tbody>
           <tr>
@@ -386,13 +388,13 @@ function Grid(props) {
         </tbody>
       </table>
       <div>
-        <h5>
+        <h2>
           {gameStatus === "pending"
             ? null
             : userTurn
-            ? "YOUR TURN!"
+            ? "It's your turn!!"
             : "Wait...CPU is playing"}
-        </h5>
+        </h2>
       </div>
     </div>
   );

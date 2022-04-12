@@ -1,16 +1,16 @@
 import { tab } from "@testing-library/user-event/dist/tab";
-/* import { Routes, Route, Router } from "react-router-dom"; */
 import "./App.css";
 import Start from "./pages/start/Start";
 import Game from "./pages/game/Game";
-/* import { createBrowserHistory } from "history";
-export const history = createBrowserHistory(); */
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div>
-      <Start />
-      <Game />
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<Start />} />
+        <Route path="/game" element={<Game />} />
+      </Routes>
     </div>
   );
 }
