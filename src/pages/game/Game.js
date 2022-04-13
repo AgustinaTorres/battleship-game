@@ -5,30 +5,33 @@ import Grid from "../../components/commons/Grid";
 import SimpleModal from "../../components/customs/Modal";
 import "./Game.css";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import * as actions from "../../context/actions";
 
 function Game(props) {
-  /* const [userShips, setUserShips] = useState(); */
   const [userShipsCells, setUserShipsCells] = useState();
+  const [userShipsCellsUploaded, setUserShipsCellsUploaded] = useState();
   const [waterShipCells, setWaterShipsCells] = useState([]);
   const [hittenShipCells, setHittenShipsCells] = useState([]);
   const [destroyedShipCells, setDestroyedShipCells] = useState([]);
 
-  /* const [cpuShips, setCpuShips] = useState(); */
   const [cpuShipCells, setCpuShipsCells] = useState();
+  const [cpuShipCellsUploaded, setCpuShipsCellsUploaded] = useState();
   const [waterCpuShipCells, setWaterCpuShipsCells] = useState([]);
   const [hittenCpuShipCells, setHittenCpuShipsCells] = useState([]);
   const [destroyedCpuCells, setDestroyedCpuCells] = useState([]);
+
   const [cpuBombs, setCpuBombs] = useState([100]);
   const [lastSuccessBombIndex, setLastSuccessBombIndex] = useState(0);
 
   const [userTurn, setUserTurn] = useState(true);
   const [cpuTurn, setCpuTurn] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [gameWinner, setGameWinner] = useState("");
-  const [gameStatus, setGameStatus] = useState(props.game_status);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let user_cells = [];
+
     props.user_ships.items.map((ship) => {
       user_cells.push(ship.cells);
       return ship;
@@ -37,20 +40,12 @@ function Game(props) {
     setUserShipsCells(user_cells);
   }, [props.user_ships]);
 
+  //sets the cpu ships manually
   useEffect(() => {
     let cpu_cells = [];
-
     props.cpu_ships.items.map((cpuShip) => {
       if (cpuShip.name === "carrier") {
-        switch (cpuShip.direction) {
-          case "x":
-            cpu_cells.push([1, 1 + 1, 1 + 2, 1 + 3]);
-            break;
-          case "y":
-            cpu_cells.push([2, 2 + 10, 2 + 20, 2 + 30]);
-            break;
-          default:
-        }
+        cpu_cells.push([1, 1 + 1, 1 + 2, 1 + 3]);
       } else if (cpuShip.name === "cruiser") {
         switch (cpuShip.direction) {
           case "x1":
@@ -65,35 +60,34 @@ function Game(props) {
           default:
         }
       } else {
-        switch (cpuShip.direction) {
-          case "x":
-            cpu_cells.push([5, 5 + 1]);
-            break;
-          case "y":
-            cpu_cells.push([6, 6 + 10]);
-            break;
-          default:
-        }
+        cpu_cells.push([6, 6 + 10]);
       }
       return cpuShip;
     });
 
     console.log("CPU_CELLSssss", cpu_cells);
     setCpuShipsCells(cpu_cells);
-    setGameStatus("started");
-  }, []);
+    setCpuShipsCellsUploaded(cpu_cells);
+  }, [props.cpu_ships]);
 
   const openModal = () => {
     setShowModal(true);
   };
 
   useEffect(() => {
-    if (destroyedCpuCells.length >= 5) {
-      setGameStatus("finished");
-      openModal();
-    } else if (destroyedShipCells.length >= 5) {
-      setGameStatus("finished");
-      openModal();
+    let data = {
+      gameStatus: "ended",
+      gameWinner: "",
+    };
+
+    if (destroyedCpuCells.length >= 15 || destroyedShipCells.length >= 15) {
+      if (destroyedCpuCells.length >= 15) {
+        data.gameWinner = props.user_name;
+      } else {
+        data.gameWinner = "CPU";
+      }
+      navigate({ pathname: "/end" });
+      props.onFinishGame(data);
     }
   }, [destroyedCpuCells, destroyedShipCells]);
 
@@ -108,16 +102,18 @@ function Game(props) {
     console.log("hitten", hittenCpuShipCells);
     console.log("water", waterCpuShipCells);
 
-    let arrayOfArraysIndex = cpuShipCells.findIndex((cellArray) =>
+    let arrayOfArraysIndex = cpuShipCellsUploaded.findIndex((cellArray) =>
       cellArray.includes(grid)
     );
 
-    let findedArray = cpuShipCells.find((array, index) => array.includes(grid));
+    let findedArray = cpuShipCellsUploaded.find((array, index) =>
+      array.includes(grid)
+    );
 
     if (findedArray && findedArray.length > 0) {
       if (findedArray.length > 1) {
         let arrayIndex = findedArray.findIndex((x) => x === grid);
-        let newCpuShipCells = [...cpuShipCells];
+        let newCpuShipCells = [...cpuShipCellsUploaded];
         newCpuShipCells[arrayOfArraysIndex] = findedArray.filter((n, index) => {
           return index !== arrayIndex;
         });
@@ -125,10 +121,17 @@ function Game(props) {
         let newHittenCpuShipCells = [...hittenCpuShipCells];
         newHittenCpuShipCells.push(grid);
         setHittenCpuShipsCells(newHittenCpuShipCells);
-        setCpuShipsCells(newCpuShipCells);
+        setCpuShipsCellsUploaded(newCpuShipCells);
       } else {
+        let arrayOfArraysIndex = cpuShipCells.findIndex((cellArray) =>
+          cellArray.includes(grid)
+        );
+        let copyCpuShipCells = [...cpuShipCells];
         let newDestroyedCpuCells = [...destroyedCpuCells];
-        newDestroyedCpuCells.push(grid);
+        copyCpuShipCells[arrayOfArraysIndex].map((destroyedCell) => {
+          newDestroyedCpuCells.push(destroyedCell);
+          return destroyedCell;
+        });
         setDestroyedCpuCells(newDestroyedCpuCells);
       }
     } else {
@@ -139,8 +142,13 @@ function Game(props) {
 
     let bomb = "";
 
-    if (lastSuccessBombIndex > 0) {
-      bomb = userShipsCells[lastSuccessBombIndex][0];
+    /*  if (
+      lastSuccessBombIndex &&
+      lastSuccessBombIndex >= 0 &&
+      userShipsCellsUploaded[lastSuccessBombIndex].length > 0
+    ) {
+      bomb = userShipsCellsUploaded[lastSuccessBombIndex][0];
+      console.log("BOMBBBB", bomb);
     } else {
       let ranNum;
       while (true) {
@@ -150,15 +158,23 @@ function Game(props) {
         }
       }
       bomb = ranNum;
+      console.log("BOMBBBB", bomb);
+    } */
+    let ranNum;
+    while (true) {
+      ranNum = Math.floor(Math.random() * 100) + 1;
+      if (![cpuBombs].includes(ranNum)) {
+        break;
+      }
     }
-    console.log("booooomb", bomb);
-    console.log("cpuBombs", cpuBombs);
+    bomb = ranNum;
+    console.log("BOMBBBB", bomb);
+    console.log(cpuBombs);
 
     let newCpuBombs = [...cpuBombs];
     newCpuBombs.push(bomb);
     setCpuBombs(newCpuBombs);
 
-    setCpuBombs(newCpuBombs);
     setUserTurn(!userTurn);
     dropBombToUser(bomb);
   };
@@ -170,6 +186,7 @@ function Game(props) {
     );
 
     //array that includes the bomb
+
     let findedArray = userShipsCells.find((array, index) =>
       array.includes(grid)
     );
@@ -195,16 +212,19 @@ function Game(props) {
         setHittenShipsCells(newHittenShipCells);
         setUserShipsCells(newUserShipCells);
         setLastSuccessBombIndex(arrayOfArraysIndex);
-        console.log("se encontro el arraaaaaay:", arrayOfArraysIndex);
+        console.log("SUCCESSSSSSSSS", arrayOfArraysIndex);
       } else {
-        //THE LAST CELL ON THE SHIP
-        //save the bomb on the destroyed array
-        let newDestroyedShipCells = [...destroyedShipCells];
-        newDestroyedShipCells.push(grid);
-        setDestroyedShipCells(newDestroyedShipCells);
-        setLastSuccessBombIndex(0);
-
-        console.log("ultimo numero del arraaaay");
+        let arrayOfArraysIndex = userShipsCells.findIndex((cellArray) =>
+          cellArray.includes(grid)
+        );
+        let copyUserShipCells = [...userShipsCells];
+        let newDestroyedUserCells = [...destroyedShipCells];
+        copyUserShipCells[arrayOfArraysIndex].map((destroyedUserCell) => {
+          newDestroyedUserCells.push(destroyedUserCell);
+          return destroyedUserCell;
+        });
+        setDestroyedShipCells(newDestroyedUserCells);
+        console.log("DESTROYED CPU CELLS", destroyedShipCells);
       }
     } else {
       //NO SHIP ON BOMB - WATER
@@ -222,36 +242,41 @@ function Game(props) {
       <div class="header text-center">
         <h1>Start Playing</h1>
       </div>
-      <div class="row  d-flex">
-        {userTurn ? (
-          <div class=" d-flex justify-content-end">
-            <Grid
-              cpuCells={cpuShipCells}
-              waterCells={waterCpuShipCells}
-              hittenCells={hittenCpuShipCells}
-              destroyedCell={destroyedCpuCells}
-              userName="CPU"
-              onClickGridAction={dropBombToCpu}
-              userTurn={userTurn}
-              gameStatus={props.game_status}
-            />
-          </div>
-        ) : (
-          <div class=" d-flex justify-content-start">
-            <Grid
-              cells={userShipsCells}
-              waterCells={waterShipCells}
-              hittenCells={hittenShipCells}
-              destroyedCell={destroyedShipCells}
-              userName={props.user_name}
-              onClickGridAction={dropBombToUser}
-              userTurn={userTurn}
-              gameStatus={props.game_status}
-            />
-          </div>
-        )}
+      <div class="row  d-flex justify-content-space-between">
+        {/*  {userTurn ? ( */}
+        <div class="col-6">
+          <Grid
+            cpuCells={cpuShipCellsUploaded}
+            waterCells={waterCpuShipCells}
+            hittenCells={hittenCpuShipCells}
+            destroyedCell={destroyedCpuCells}
+            userName="CPU"
+            onClickGridAction={dropBombToCpu}
+            userTurn={userTurn}
+            gameStatus={props.game_status}
+            gameWinner={props.game_winner}
+          />
+        </div>
+        {/* ) : ( */}
+        <div class="col-6">
+          <Grid
+            cells={userShipsCells}
+            waterCells={waterShipCells}
+            hittenCells={hittenShipCells}
+            destroyedCell={destroyedShipCells}
+            userName={props.user_name}
+            onClickGridAction={dropBombToUser}
+            userTurn={userTurn}
+            gameStatus={props.game_status}
+            gameWinner={props.game_winner}
+          />
+        </div>
+        {/*   )} */}
       </div>
-      <div class=" d-flex justify-content-center">
+      <div class="message-turn">
+        <h2>{userTurn ? "It's your turn!!" : "Wait...CPU is playing"}</h2>
+      </div>
+      <div class="  justify-content-center">
         <button
           component={Link}
           to="/"
@@ -264,21 +289,9 @@ function Game(props) {
         </button>
       </div>
       <SimpleModal
-        title={
-          gameStatus === "started"
-            ? "YOU ARE SURRENDING THE GAME"
-            : gameWinner === props.user_name
-            ? "CONGRATULATIONS, YOU WON!!"
-            : "WE ARE VERY SORRY, YOU LOST"
-        }
-        message={
-          gameStatus === "started"
-            ? "Are you sure?"
-            : gameWinner !== props.user_name
-            ? "Keep playing and scoring!!"
-            : "ake another chance, you can do it!"
-        }
-        gameStatus={gameStatus}
+        surrender={props.onSurrenderGame}
+        title="YOU ARE SURRENDING THE GAME"
+        message="Are you sure?"
         show={showModal}
         onClose={() => {
           setShowModal(false);
@@ -297,4 +310,11 @@ const mapStateToProps = (state) => {
     game_winner: state.game.game_winner,
   };
 };
-export default connect(mapStateToProps)(Game);
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onFinishGame: (data) => dispatch(actions.finishGame(data)),
+    onSurrenderGame: (data) => dispatch(actions.surrenderGame(data)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Game);

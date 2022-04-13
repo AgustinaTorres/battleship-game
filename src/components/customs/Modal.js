@@ -1,18 +1,12 @@
-import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-function SimpleModal({
-  gameStatus,
-  show,
-  onClose,
-  title,
-  message,
-  yesButton,
-  noButton,
-  closeButton,
-}) {
+function SimpleModal({ gameStatus, show, onClose, title, message, surrender }) {
   const navigate = useNavigate();
+  const onSurrender = () => {
+    navigate({ pathname: "/" });
+    surrender("surrended");
+  };
   return (
     <>
       <Modal show={show} onHide={onClose} animation={true} size="lg">
@@ -23,23 +17,14 @@ function SimpleModal({
         <Modal.Body>{message}</Modal.Body>
 
         <Modal.Footer>
-          {gameStatus === "started" ? (
-            <div>
-              <Button
-                variant="secondary"
-                onClick={() => navigate({ pathname: "/" })}
-              >
-                YES
-              </Button>
-              <Button variant="primary" onClick={onClose}>
-                NO
-              </Button>
-            </div>
-          ) : (
-            <Button variant="primary" onClick={onClose}>
-              PLAY AGAIN!
+          <div>
+            <Button variant="secondary" onClick={onSurrender}>
+              YES
             </Button>
-          )}
+            <Button variant="primary" onClick={onClose}>
+              CANCEL
+            </Button>
+          </div>
         </Modal.Footer>
       </Modal>
     </>

@@ -1,13 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
+
 import { useState, useEffect } from "react";
-import startGame from "../../context/actions";
+import * as actions from "../../context/actions";
+
 import "./Start.css";
 import Grid from "../../components/commons/Grid";
 import Ships from "../../components/customs/Ships";
 import Form from "../../components/customs/Form";
 import { GiSinkingShip } from "react-icons/gi";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const StartLayout = (props) => {
@@ -20,19 +21,22 @@ const StartLayout = (props) => {
   const [disableStartButton, setDisableStartButton] = useState(true);
 
   const navigate = useNavigate();
-  useEffect(() => {
-    console.log("USE_EFFECT");
-    console.log("SHIPS", props.user_ships.items);
-    setShips(props.user_ships.items);
-    setUserName(props.user_name);
-  }, []);
 
+  //saves the redux user ships on the local state once.
+  useEffect(() => {
+    console.log("USER_SHIPS", props.user_ships.items);
+    setShips(props.user_ships.items);
+    /*  setUserName(props.user_name); */
+  }, [props.user_ships]);
+
+  //actives the start playing button if all the ships are placed and the user's name written
   useEffect(() => {
     if (userName !== "" && activeShipId === 6) {
       setDisableStartButton(false);
     }
   }, [userName]);
 
+  //changes the direction of the current selected ship
   const changeShipDirection = (ship_id, index) => {
     const new_ships = ships.map((ship) => {
       if (ship.id === ship_id) {
@@ -53,6 +57,7 @@ const StartLayout = (props) => {
     console.log(currentShip);
   };
 
+  //places the selected ship on the playing board
   const setShipOnGrid = (grid) => {
     if (activeShip) {
       let currentShipCells = [];
@@ -91,7 +96,6 @@ const StartLayout = (props) => {
       setCells(cells.concat(currentShipCells));
       setActiveShipId(activeShipId + 1);
       setActiveShip(false);
-      console.log("ultimoooo barcoooo", typeof activeShipId);
     } else {
     }
   };
@@ -107,25 +111,27 @@ const StartLayout = (props) => {
       return ship;
     });
     setShips(shipWithCells);
+    console.log(shipWithCells);
   };
 
   const handleChange = (e) => {
     setUserName(e.target.value);
-    console.log("VALORESSSS", userName, activeShipId);
   };
 
   const startPlaying = () => {
     let data = {
       ships,
       userName,
+      gameStatus: "started",
     };
+    console.log("dataaaaaaaa", data);
     props.onStartGame(data);
     navigate({ pathname: "/game" });
   };
 
   return (
     <div class=" container ">
-      <div class="d-flex justify-content-center ">
+      <div class=" title d-flex justify-content-center ">
         <div class="mx-5 my-3">
           <h1>BATTLESHIP GAME</h1>
         </div>
@@ -133,13 +139,16 @@ const StartLayout = (props) => {
           <GiSinkingShip class="big-icon" />
         </div>
       </div>
-      <Grid
-        userCells={cells}
-        onClickGridAction={setShipOnGrid}
-        colorCell="table-primary"
-        gameStatus={props.game_status}
-      />
-      <div class="elements">
+      <div class="grid">
+        <Grid
+          userCells={cells}
+          onClickGridAction={setShipOnGrid}
+          colorCell="table-primary"
+          gameStatus={props.game_status}
+        />
+      </div>
+
+      <div class="settings">
         <Ships
           ships={ships}
           selectShip={selectShip}
@@ -150,7 +159,6 @@ const StartLayout = (props) => {
           userName={userName}
           handleChange={handleChange}
           startPlaying={startPlaying}
-          activeShipId={activeShipId}
           disableStartButton={disableStartButton}
         />
       </div>
@@ -168,7 +176,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onStartGame: (data) => dispatch(startGame(data)),
+    onStartGame: (data) => dispatch(actions.startGame(data)),
   };
 };
 

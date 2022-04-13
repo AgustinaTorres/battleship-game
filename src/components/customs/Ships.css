@@ -15,18 +15,21 @@
 }
 
 .carrier {
-  width: 270px;
+  width: 350px;
   background-color: rgb(75, 90, 141);
+  color: black;
 }
 
 .cruiser {
-  width: 200px;
+  width: 250px;
   background-color: rgb(176, 84, 56);
+  color: black;
 }
 
 .submarine {
-  width: 120px;
+  width: 180px;
   background-color: rgb(172, 173, 61);
+  color: black;
 }
 .direction {
   font-size: 1.2rem;
@@ -34,4 +37,8 @@
   border: gray;
   color: black;
   height: 50px;
+  border-radius: 1.5ch;
+  width: 250px;
+  height: auto;
+  font-weight: bold;
 }

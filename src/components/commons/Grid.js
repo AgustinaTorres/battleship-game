@@ -2,11 +2,14 @@ import React from "react";
 import { useState } from "react";
 
 function Grid(props) {
-  const [grid, setGrid] = useState(
-    Array(100)
-      .fill()
-      .map((el, i) => i)
-  );
+  const rowNumber = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const rowRange = (rowNumber) => {
+    let array = [];
+    for (var i = (rowNumber - 1) * 10 + 1; i <= rowNumber * 10; i++) {
+      array.push(i);
+    }
+    return array;
+  };
 
   const {
     userName,
@@ -21,380 +24,59 @@ function Grid(props) {
   } = props;
 
   return (
-    <div class="grid  my-2 ">
-      <h5>{userName && userName + " ships"}</h5>
-      <table class="table bg-secondary table-bordered text-center">
-        <tbody>
-          <tr>
-            {grid
-              .map((grid) => {
-                return (
-                  <td
-                    class={
-                      cells && cells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : cpuCells &&
-                          cpuCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : userCells &&
-                          userCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : waterCells &&
-                          waterCells.filter((cell) => cell === grid).length > 0
-                        ? "table-info"
-                        : hittenCells &&
-                          hittenCells.filter((cell) => cell === grid).length > 0
-                        ? "table-danger"
-                        : destroyedCell &&
+    <div class="my-2">
+      {/* ==========  PLAYER TURN - RENDERS ONLY ON THE GAME PAGE ========= */}
+      <div class="player-turn">
+        <h5>{userName && userName + " ships"}</h5>
+      </div>
+      <div class="board">
+        <table class="table bg-secondary table-bordered text-center">
+          <tbody>
+            {rowNumber.map((rowNum) => {
+              return (
+                <tr>
+                  {rowRange(rowNum).map((grid) => {
+                    return (
+                      <td
+                        class={
+                          destroyedCell &&
                           destroyedCell.filter((cell) => cell === grid).length >
                             0
-                        ? "table-dark"
-                        : "cell"
-                    }
-                    key={grid}
-                  >
-                    <div onClick={() => props.onClickGridAction(grid)}>
-                      {grid}
-                    </div>
-                  </td>
-                );
-              })
-              .slice(0, 10)}
-          </tr>
-          <tr>
-            {grid
-              .map((grid) => {
-                return (
-                  <td
-                    class={
-                      cells && cells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : cpuCells &&
-                          cpuCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : userCells &&
-                          userCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : waterCells &&
-                          waterCells.filter((cell) => cell === grid).length > 0
-                        ? "table-info"
-                        : hittenCells &&
-                          hittenCells.filter((cell) => cell === grid).length > 0
-                        ? "table-danger"
-                        : destroyedCell &&
-                          destroyedCell.filter((cell) => cell === grid).length >
-                            0
-                        ? "table-dark"
-                        : "cell"
-                    }
-                    key={grid}
-                  >
-                    <div onClick={() => props.onClickGridAction(grid)}>
-                      {grid}
-                    </div>
-                  </td>
-                );
-              })
-              .slice(10, 20)}
-          </tr>
-          <tr>
-            {grid
-              .map((grid) => {
-                return (
-                  <td
-                    class={
-                      cells && cells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : cpuCells &&
-                          cpuCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : userCells &&
-                          userCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : waterCells &&
-                          waterCells.filter((cell) => cell === grid).length > 0
-                        ? "table-info"
-                        : hittenCells &&
-                          hittenCells.filter((cell) => cell === grid).length > 0
-                        ? "table-danger"
-                        : destroyedCell &&
-                          destroyedCell.filter((cell) => cell === grid).length >
-                            0
-                        ? "table-dark"
-                        : "cell"
-                    }
-                    key={grid}
-                  >
-                    <div onClick={() => props.onClickGridAction(grid)}>
-                      {grid}
-                    </div>
-                  </td>
-                );
-              })
-              .slice(20, 30)}
-          </tr>
-          <tr>
-            {grid
-              .map((grid) => {
-                return (
-                  <td
-                    class={
-                      cells && cells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : cpuCells &&
-                          cpuCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : userCells &&
-                          userCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : waterCells &&
-                          waterCells.filter((cell) => cell === grid).length > 0
-                        ? "table-info"
-                        : hittenCells &&
-                          hittenCells.filter((cell) => cell === grid).length > 0
-                        ? "table-danger"
-                        : destroyedCell &&
-                          destroyedCell.filter((cell) => cell === grid).length >
-                            0
-                        ? "table-dark"
-                        : "cell"
-                    }
-                    key={grid}
-                  >
-                    <div onClick={() => props.onClickGridAction(grid)}>
-                      {grid}
-                    </div>
-                  </td>
-                );
-              })
-              .slice(30, 40)}
-          </tr>
-          <tr>
-            {grid
-              .map((grid) => {
-                return (
-                  <td
-                    class={
-                      cells && cells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : cpuCells &&
-                          cpuCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : userCells &&
-                          userCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : waterCells &&
-                          waterCells.filter((cell) => cell === grid).length > 0
-                        ? "table-info"
-                        : hittenCells &&
-                          hittenCells.filter((cell) => cell === grid).length > 0
-                        ? "table-danger"
-                        : destroyedCell &&
-                          destroyedCell.filter((cell) => cell === grid).length >
-                            0
-                        ? "table-dark"
-                        : "cell"
-                    }
-                    key={grid}
-                  >
-                    <div onClick={() => props.onClickGridAction(grid)}>
-                      {grid}
-                    </div>
-                  </td>
-                );
-              })
-              .slice(40, 50)}
-          </tr>
-          <tr>
-            {grid
-              .map((grid) => {
-                return (
-                  <td
-                    class={
-                      cells && cells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : cpuCells &&
-                          cpuCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : userCells &&
-                          userCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : waterCells &&
-                          waterCells.filter((cell) => cell === grid).length > 0
-                        ? "table-info"
-                        : hittenCells &&
-                          hittenCells.filter((cell) => cell === grid).length > 0
-                        ? "table-danger"
-                        : destroyedCell &&
-                          destroyedCell.filter((cell) => cell === grid).length >
-                            0
-                        ? "table-dark"
-                        : "cell"
-                    }
-                    key={grid}
-                  >
-                    <div onClick={() => props.onClickGridAction(grid)}>
-                      {grid}
-                    </div>
-                  </td>
-                );
-              })
-              .slice(50, 60)}
-          </tr>
-          <tr>
-            {grid
-              .map((grid) => {
-                return (
-                  <td
-                    class={
-                      cells && cells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : cpuCells &&
-                          cpuCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : userCells &&
-                          userCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : waterCells &&
-                          waterCells.filter((cell) => cell === grid).length > 0
-                        ? "table-info"
-                        : hittenCells &&
-                          hittenCells.filter((cell) => cell === grid).length > 0
-                        ? "table-danger"
-                        : destroyedCell &&
-                          destroyedCell.filter((cell) => cell === grid).length >
-                            0
-                        ? "table-dark"
-                        : "cell"
-                    }
-                    key={grid}
-                  >
-                    <div onClick={() => props.onClickGridAction(grid)}>
-                      {grid}
-                    </div>
-                  </td>
-                );
-              })
-              .slice(60, 70)}
-          </tr>
-          <tr>
-            {grid
-              .map((grid) => {
-                return (
-                  <td
-                    class={
-                      cells && cells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : cpuCells &&
-                          cpuCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : userCells &&
-                          userCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : waterCells &&
-                          waterCells.filter((cell) => cell === grid).length > 0
-                        ? "table-info"
-                        : hittenCells &&
-                          hittenCells.filter((cell) => cell === grid).length > 0
-                        ? "table-danger"
-                        : destroyedCell &&
-                          destroyedCell.filter((cell) => cell === grid).length >
-                            0
-                        ? "table-dark"
-                        : "cell"
-                    }
-                    key={grid}
-                  >
-                    <div onClick={() => props.onClickGridAction(grid)}>
-                      {grid}
-                    </div>
-                  </td>
-                );
-              })
-              .slice(70, 80)}
-          </tr>
-          <tr>
-            {grid
-              .map((grid) => {
-                return (
-                  <td
-                    class={
-                      cells && cells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : cpuCells &&
-                          cpuCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : userCells &&
-                          userCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : waterCells &&
-                          waterCells.filter((cell) => cell === grid).length > 0
-                        ? "table-info"
-                        : hittenCells &&
-                          hittenCells.filter((cell) => cell === grid).length > 0
-                        ? "table-danger"
-                        : destroyedCell &&
-                          destroyedCell.filter((cell) => cell === grid).length >
-                            0
-                        ? "table-dark"
-                        : "cell"
-                    }
-                    key={grid}
-                  >
-                    <div onClick={() => props.onClickGridAction(grid)}>
-                      {grid}
-                    </div>
-                  </td>
-                );
-              })
-              .slice(80, 90)}
-          </tr>
-          <tr>
-            {grid
-              .map((grid) => {
-                return (
-                  <td
-                    class={
-                      cells && cells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : cpuCells &&
-                          cpuCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : userCells &&
-                          userCells.filter((cell) => cell === grid).length > 0
-                        ? "table-secondary"
-                        : waterCells &&
-                          waterCells.filter((cell) => cell === grid).length > 0
-                        ? "table-info"
-                        : hittenCells &&
-                          hittenCells.filter((cell) => cell === grid).length > 0
-                        ? "table-danger"
-                        : destroyedCell &&
-                          destroyedCell.filter((cell) => cell === grid).length >
-                            0
-                        ? "table-dark"
-                        : "cell"
-                    }
-                    key={grid}
-                  >
-                    <div onClick={() => props.onClickGridAction(grid)}>
-                      {grid}
-                    </div>
-                  </td>
-                );
-              })
-              .slice(90, 100)}
-          </tr>
-        </tbody>
-      </table>
-      <div>
-        <h2>
-          {gameStatus === "pending"
-            ? null
-            : userTurn
-            ? "It's your turn!!"
-            : "Wait...CPU is playing"}
-        </h2>
+                            ? "table-danger"
+                            : cells &&
+                              cells.filter((cell) => cell === grid).length > 0
+                            ? "table-secondary"
+                            : cpuCells &&
+                              cpuCells.filter((cell) => cell === grid).length >
+                                0
+                            ? "table-secondary"
+                            : userCells &&
+                              userCells.filter((cell) => cell === grid).length >
+                                0
+                            ? "table-secondary"
+                            : waterCells &&
+                              waterCells.filter((cell) => cell === grid)
+                                .length > 0
+                            ? "table-info"
+                            : hittenCells &&
+                              hittenCells.filter((cell) => cell === grid)
+                                .length > 0
+                            ? "table-warning"
+                            : "cell"
+                        }
+                        key={grid}
+                      >
+                        <div onClick={() => props.onClickGridAction(grid)}>
+                          {grid}
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );

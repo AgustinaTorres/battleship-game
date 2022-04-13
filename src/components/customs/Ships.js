@@ -1,7 +1,9 @@
 import React from "react";
 import "./Ships.css";
 import { GiCarrier } from "react-icons/gi";
-
+/* GiCruiser;
+GiSubmarine;
+ */
 function Ships(props) {
   return (
     <div>
@@ -10,12 +12,12 @@ function Ships(props) {
           Select your ships and set them on the Grid...
         </h3>
       </div>
-      <div class="ship-actions d-flex col">
+      <div class="ship-actions d-flex col justify-content-between">
         <div class="ships">
           {props.ships && props.ships !== " "
             ? props.ships.map((ship, index) => {
                 return (
-                  <div class="row-4 d-flex justify-content-between">
+                  <div class="">
                     <button
                       disabled={props.activeShipId !== ship.id}
                       type="button"
@@ -28,6 +30,7 @@ function Ships(props) {
                       }
                       onClick={() => props.selectShip(ship.id, index)}
                     >
+                      <GiCarrier class="icon" />
                       {ship.name + " " + ship.direction}
                     </button>
                   </div>
@@ -35,7 +38,7 @@ function Ships(props) {
               })
             : null}
         </div>
-        <div class="row text-center">
+        <div class="row text-center align-items-center">
           <button
             type="button"
             class="direction btn btn-secondary btn-sm mx-3 "

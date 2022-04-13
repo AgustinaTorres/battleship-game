@@ -10,7 +10,6 @@ export const user_ships = (
         spaces: 4,
         direction: "x",
         cells: [],
-        /* state: "safe", */
       },
       {
         id: 2,
@@ -18,7 +17,6 @@ export const user_ships = (
         spaces: 3,
         direction: "x",
         cells: [],
-        /* state: "safe", */
       },
       {
         id: 3,
@@ -26,7 +24,6 @@ export const user_ships = (
         spaces: 3,
         direction: "x",
         cells: [],
-        /* state: "safe", */
       },
       {
         id: 4,
@@ -34,7 +31,6 @@ export const user_ships = (
         spaces: 3,
         direction: "x",
         cells: [],
-        /* state: "safe", */
       },
       {
         id: 5,
@@ -42,7 +38,6 @@ export const user_ships = (
         spaces: 2,
         direction: "x",
         cells: [],
-        /* state: "safe", */
       },
     ],
   },
@@ -54,6 +49,61 @@ export const user_ships = (
         ...state,
         items: action.data.ships,
       };
+
+    default:
+      return state;
+  }
+};
+
+export const cpu_ships = (
+  state = {
+    items: [
+      {
+        id: 6,
+        name: "carrier",
+        spaces: 4,
+        direction:
+          "x" /* directions[Math.floor(Math.random() * directions.length)] */,
+        cells: [],
+        icon: "GiCarrier",
+      },
+      {
+        id: 7,
+        name: "cruiser",
+        spaces: 3,
+        direction:
+          "x1" /* directions[Math.floor(Math.random() * directions.length)] */,
+        cells: [],
+      },
+      {
+        id: 8,
+        name: "cruiser",
+        spaces: 3,
+        direction:
+          "x2" /* directions[Math.floor(Math.random() * directions.length)] */,
+        cells: [],
+      },
+      {
+        id: 9,
+        name: "cruiser",
+        spaces: 3,
+        direction:
+          "x3" /* directions[Math.floor(Math.random() * directions.length)] */,
+        cells: [],
+      },
+      {
+        id: 10,
+        name: "submarine",
+        spaces: 2,
+        direction:
+          "x" /* directions[Math.floor(Math.random() * directions.length)] */,
+        cells: [],
+      },
+    ],
+  },
+  action
+) => {
+  switch (action.type) {
     default:
       return state;
   }
@@ -71,92 +121,21 @@ export const game = (
     case types.START_GAME:
       return {
         ...state,
-        game_status: "started",
+        game_status: action.data.gameStatus,
         user_name: action.data.userName,
-      };
-
-    case types.CANCEL_GAME:
-      return {
-        ...state,
-        game_status: "canceled",
       };
     case types.FINISH_GAME:
       return {
         ...state,
-        game_status: "finished",
+        game_status: action.data.gameStatus,
+        game_winner: action.data.gameWinner,
       };
-    case types.SEE_GAME_WINNER:
+    case types.SURRENDER_GAME:
       return {
         ...state,
-        game_winner: action.data,
+        game_status: action.data.gameStatus,
       };
 
-    default:
-      return state;
-  }
-};
-
-let directions = ["x", "y"];
-
-export const cpu_ships = (
-  state = {
-    items: [
-      {
-        id: 6,
-        name: "carrier",
-        spaces: 4,
-        direction:
-          "x" /* directions[Math.floor(Math.random() * directions.length)] */,
-        cells: [],
-        icon: "GiCarrier",
-        /* state: "safe", */
-      },
-      {
-        id: 7,
-        name: "cruiser",
-        spaces: 3,
-        direction:
-          "x1" /* directions[Math.floor(Math.random() * directions.length)] */,
-        cells: [],
-        /* state: "safe", */
-      },
-      {
-        id: 8,
-        name: "cruiser",
-        spaces: 3,
-        direction:
-          "x2" /* directions[Math.floor(Math.random() * directions.length)] */,
-        cells: [],
-        /* state: "safe", */
-      },
-      {
-        id: 9,
-        name: "cruiser",
-        spaces: 3,
-        direction:
-          "x3" /* directions[Math.floor(Math.random() * directions.length)] */,
-        cells: [],
-        /* state: "safe", */
-      },
-      {
-        id: 10,
-        name: "submarine",
-        spaces: 2,
-        direction:
-          "x" /* directions[Math.floor(Math.random() * directions.length)] */,
-        cells: [],
-        /* state: "safe", */
-      },
-    ],
-  },
-  action
-) => {
-  switch (action.type) {
-    /* case types.START_GAME:
-      return {
-        ...state,
-        items: action.data.ships,
-      }; */
     default:
       return state;
   }
@@ -164,6 +143,6 @@ export const cpu_ships = (
 
 export default combineReducers({
   user_ships,
-  game,
   cpu_ships,
+  game,
 });

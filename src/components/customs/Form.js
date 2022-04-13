@@ -1,6 +1,5 @@
 import React from "react";
 import "./Form.css";
-import { Link } from "react-router-dom";
 
 function Form(props) {
   return (
@@ -10,7 +9,6 @@ function Form(props) {
         placeholder="What's your Name?..."
         value={props.userName}
         onChange={props.handleChange}
-        autocomplete="off"
       ></input>
 
       <button

@@ -1,10 +1,22 @@
 import types from "./types";
 
-function startGame(data) {
+export const startGame = (data) => {
   return {
     type: types.START_GAME,
     data,
   };
-}
+};
 
-export default startGame;
+export const finishGame = (data) => {
+  return {
+    type: types.FINISH_GAME,
+    data,
+  };
+};
+
+export const surrenderGame = (data) => {
+  return {
+    type: types.SURRENDER_GAME,
+    data,
+  };
+};
