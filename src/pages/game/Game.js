@@ -230,7 +230,8 @@ function Game(props) {
   return (
     <div class="  my-3  justify-items-center">
       <div class="header text-center mb-5">
-        <h2>START PLAYING</h2>
+        <h1>WELCOME {props.user_name.toUpperCase()} </h1>
+        <h3> START PLAYING</h3>
       </div>
       <div class=" row-md  d-flex justify-content-center col-sm ">
         <div class="col-md-5 row-sm ">
