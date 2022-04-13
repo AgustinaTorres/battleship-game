@@ -1,3 +1,7 @@
+.surrender-button {
+  height: 50px;
+}
+
 .surrender-button:hover {
   background-color: red;
   color: white;

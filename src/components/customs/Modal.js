@@ -2,9 +2,10 @@ import { Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 function SimpleModal({ gameStatus, show, onClose, title, message, surrender }) {
-  const navigate = useNavigate();
+  const navigation = useNavigate();
   const onSurrender = () => {
-    navigate({ pathname: "/" });
+    navigation({ pathname: "/" });
+    navigation(0);
     surrender("surrended");
   };
   return (

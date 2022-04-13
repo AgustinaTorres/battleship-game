@@ -13,24 +13,34 @@ function Grid(props) {
 
   const {
     userName,
-    gameStatus,
     destroyedCell,
-    userTurn,
     cells,
     cpuCells,
     userCells,
     waterCells,
     hittenCells,
+    gameStatus,
   } = props;
 
   return (
-    <div class="my-2">
-      {/* ==========  PLAYER TURN - RENDERS ONLY ON THE GAME PAGE ========= */}
-      <div class="player-turn">
-        <h5>{userName && userName + " ships"}</h5>
+    <div class="my-2 container-fluid ">
+      <div class="player-turn text-center ">
+        {gameStatus !== "pending" && (
+          <h5>
+            {userName === "CPU"
+              ? "CLICK HERE - Send a bomb"
+              : "Don't click here - CPU"}
+          </h5>
+        )}
       </div>
-      <div class="board">
-        <table class="table bg-secondary table-bordered text-center">
+      <div>
+        <table
+          class={
+            userName === "CPU" && gameStatus === "started"
+              ? "table table-bordered text-center text-secondary bg-secondary "
+              : "table table-bordered text-center text-white "
+          }
+        >
           <tbody>
             {rowNumber.map((rowNum) => {
               return (
@@ -42,27 +52,27 @@ function Grid(props) {
                           destroyedCell &&
                           destroyedCell.filter((cell) => cell === grid).length >
                             0
-                            ? "table-danger"
+                            ? "bg-danger text-danger"
                             : cells &&
                               cells.filter((cell) => cell === grid).length > 0
-                            ? "table-secondary"
+                            ? " bg-primary text-primary"
                             : cpuCells &&
                               cpuCells.filter((cell) => cell === grid).length >
                                 0
-                            ? "table-secondary"
+                            ? " bg-primary text-primary"
                             : userCells &&
                               userCells.filter((cell) => cell === grid).length >
                                 0
-                            ? "table-secondary"
+                            ? " bg-primary text-primary"
                             : waterCells &&
                               waterCells.filter((cell) => cell === grid)
                                 .length > 0
-                            ? "table-info"
+                            ? "bg-info text-info"
                             : hittenCells &&
                               hittenCells.filter((cell) => cell === grid)
                                 .length > 0
-                            ? "table-warning"
-                            : "cell"
+                            ? "bg-warning text-warning"
+                            : "bg-secondary text-secondary"
                         }
                         key={grid}
                       >

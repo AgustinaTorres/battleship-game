@@ -62,8 +62,7 @@ export const cpu_ships = (
         id: 6,
         name: "carrier",
         spaces: 4,
-        direction:
-          "x" /* directions[Math.floor(Math.random() * directions.length)] */,
+        direction: "x",
         cells: [],
         icon: "GiCarrier",
       },
@@ -71,33 +70,28 @@ export const cpu_ships = (
         id: 7,
         name: "cruiser",
         spaces: 3,
-        direction:
-          "x1" /* directions[Math.floor(Math.random() * directions.length)] */,
+        direction: "x1",
         cells: [],
       },
       {
         id: 8,
         name: "cruiser",
         spaces: 3,
-        direction:
-          "x2" /* directions[Math.floor(Math.random() * directions.length)] */,
+        direction: "x2",
         cells: [],
       },
       {
         id: 9,
         name: "cruiser",
         spaces: 3,
-        direction:
-          "x3" /* directions[Math.floor(Math.random() * directions.length)] */,
+        direction: "x3",
         cells: [],
       },
       {
         id: 10,
         name: "submarine",
         spaces: 2,
-        direction:
-          "x" /* directions[Math.floor(Math.random() * directions.length)] */,
-        cells: [],
+        direction: "x",
       },
     ],
   },

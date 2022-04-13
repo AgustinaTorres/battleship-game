@@ -22,13 +22,13 @@ function Game(props) {
   const [destroyedCpuCells, setDestroyedCpuCells] = useState([]);
 
   const [cpuBombs, setCpuBombs] = useState([100]);
-  const [lastSuccessBombIndex, setLastSuccessBombIndex] = useState(0);
+  const [lastSuccessBombIndex, setLastSuccessBombIndex] = useState();
 
   const [userTurn, setUserTurn] = useState(true);
   const [cpuTurn, setCpuTurn] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
 
+  const navigation = useNavigate();
   useEffect(() => {
     let user_cells = [];
 
@@ -36,8 +36,9 @@ function Game(props) {
       user_cells.push(ship.cells);
       return ship;
     });
-    console.log("USER_CELLSssss", user_cells);
+    console.log("USER_CELLS", user_cells);
     setUserShipsCells(user_cells);
+    setUserShipsCellsUploaded(user_cells);
   }, [props.user_ships]);
 
   //sets the cpu ships manually
@@ -65,7 +66,7 @@ function Game(props) {
       return cpuShip;
     });
 
-    console.log("CPU_CELLSssss", cpu_cells);
+    console.log("CPU_CELLS", cpu_cells);
     setCpuShipsCells(cpu_cells);
     setCpuShipsCellsUploaded(cpu_cells);
   }, [props.cpu_ships]);
@@ -82,12 +83,14 @@ function Game(props) {
 
     if (destroyedCpuCells.length >= 15 || destroyedShipCells.length >= 15) {
       if (destroyedCpuCells.length >= 15) {
+        navigation({ pathname: "/end" });
+        props.onFinishGame(data);
         data.gameWinner = props.user_name;
       } else {
         data.gameWinner = "CPU";
+        navigation({ pathname: "/end" });
+        props.onFinishGame(data);
       }
-      navigate({ pathname: "/end" });
-      props.onFinishGame(data);
     }
   }, [destroyedCpuCells, destroyedShipCells]);
 
@@ -99,9 +102,6 @@ function Game(props) {
   }
 
   const dropBombToCpu = (grid) => {
-    console.log("hitten", hittenCpuShipCells);
-    console.log("water", waterCpuShipCells);
-
     let arrayOfArraysIndex = cpuShipCellsUploaded.findIndex((cellArray) =>
       cellArray.includes(grid)
     );
@@ -133,6 +133,7 @@ function Game(props) {
           return destroyedCell;
         });
         setDestroyedCpuCells(newDestroyedCpuCells);
+        console.log("DESTROYED USER CELLS", destroyedCpuCells);
       }
     } else {
       let newWaterCpuShipCells = [...waterCpuShipCells];
@@ -141,14 +142,11 @@ function Game(props) {
     }
 
     let bomb = "";
-
-    /*  if (
+    if (
       lastSuccessBombIndex &&
-      lastSuccessBombIndex >= 0 &&
       userShipsCellsUploaded[lastSuccessBombIndex].length > 0
     ) {
       bomb = userShipsCellsUploaded[lastSuccessBombIndex][0];
-      console.log("BOMBBBB", bomb);
     } else {
       let ranNum;
       while (true) {
@@ -158,37 +156,30 @@ function Game(props) {
         }
       }
       bomb = ranNum;
-      console.log("BOMBBBB", bomb);
-    } */
-    let ranNum;
-    while (true) {
-      ranNum = Math.floor(Math.random() * 100) + 1;
-      if (![cpuBombs].includes(ranNum)) {
-        break;
-      }
     }
-    bomb = ranNum;
-    console.log("BOMBBBB", bomb);
-    console.log(cpuBombs);
+
+    console.log("BOMB IS:", bomb);
 
     let newCpuBombs = [...cpuBombs];
     newCpuBombs.push(bomb);
     setCpuBombs(newCpuBombs);
 
-    setUserTurn(!userTurn);
+    console.log("ARRAY OF BOMBS", newCpuBombs);
+
     dropBombToUser(bomb);
+    setUserTurn(!userTurn);
   };
 
-  const dropBombToUser = (grid) => {
+  const dropBombToUser = (bomb) => {
     //index of the array that includes the bomb
-    let arrayOfArraysIndex = userShipsCells.findIndex((cellArray) =>
-      cellArray.includes(grid)
+    let arrayOfArraysIndexUser = userShipsCellsUploaded.findIndex((cellArray) =>
+      cellArray.includes(bomb)
     );
 
     //array that includes the bomb
 
-    let findedArray = userShipsCells.find((array, index) =>
-      array.includes(grid)
+    let findedArrayUser = userShipsCellsUploaded.find((array, index) =>
+      array.includes(bomb)
     );
 
     //THE SHIP HAS MORE THAN 1 SAFE CELL
@@ -196,26 +187,25 @@ function Game(props) {
     //makes a copy of the initial cell arrays
     //upload the initial cell arrays (without the bomb)
     //saves the bomb on hitten array
-    if (findedArray && findedArray.length > 0) {
-      if (findedArray.length > 1) {
-        let arrayIndex = findedArray.findIndex((x) => x === grid);
-        let newUserShipCells = [...userShipsCells];
-        newUserShipCells[arrayOfArraysIndex] = findedArray.filter(
+    if (findedArrayUser && findedArrayUser.length > 0) {
+      if (findedArrayUser.length > 1) {
+        let arrayIndex = findedArrayUser.findIndex((x) => x === bomb);
+        let newUserShipCells = [...userShipsCellsUploaded];
+        newUserShipCells[arrayOfArraysIndexUser] = findedArrayUser.filter(
           (n, index) => {
             return index !== arrayIndex;
           }
         );
 
         let newHittenShipCells = [...hittenShipCells];
-        newHittenShipCells.push(grid);
+        newHittenShipCells.push(bomb);
 
         setHittenShipsCells(newHittenShipCells);
-        setUserShipsCells(newUserShipCells);
-        setLastSuccessBombIndex(arrayOfArraysIndex);
-        console.log("SUCCESSSSSSSSS", arrayOfArraysIndex);
+        setUserShipsCellsUploaded(newUserShipCells);
+        setLastSuccessBombIndex(arrayOfArraysIndexUser);
       } else {
         let arrayOfArraysIndex = userShipsCells.findIndex((cellArray) =>
-          cellArray.includes(grid)
+          cellArray.includes(bomb)
         );
         let copyUserShipCells = [...userShipsCells];
         let newDestroyedUserCells = [...destroyedShipCells];
@@ -224,13 +214,13 @@ function Game(props) {
           return destroyedUserCell;
         });
         setDestroyedShipCells(newDestroyedUserCells);
-        console.log("DESTROYED CPU CELLS", destroyedShipCells);
+        setLastSuccessBombIndex();
       }
     } else {
       //NO SHIP ON BOMB - WATER
       //save the bomb on the destroyed array
       let newWaterShipCells = [...waterShipCells];
-      newWaterShipCells.push(grid);
+      newWaterShipCells.push(bomb);
       setWaterShipsCells(newWaterShipCells);
     }
 
@@ -238,13 +228,12 @@ function Game(props) {
   };
 
   return (
-    <div class="container  my-5 ">
-      <div class="header text-center">
-        <h1>Start Playing</h1>
+    <div class="  my-3  justify-items-center">
+      <div class="header text-center mb-5">
+        <h2>START PLAYING</h2>
       </div>
-      <div class="row  d-flex justify-content-space-between">
-        {/*  {userTurn ? ( */}
-        <div class="col-6">
+      <div class=" row-md  d-flex justify-content-center col-sm ">
+        <div class="col-md-5 row-sm ">
           <Grid
             cpuCells={cpuShipCellsUploaded}
             waterCells={waterCpuShipCells}
@@ -257,8 +246,7 @@ function Game(props) {
             gameWinner={props.game_winner}
           />
         </div>
-        {/* ) : ( */}
-        <div class="col-6">
+        <div class="col-md-5 d-none d-md-block">
           <Grid
             cells={userShipsCells}
             waterCells={waterShipCells}
@@ -271,18 +259,17 @@ function Game(props) {
             gameWinner={props.game_winner}
           />
         </div>
-        {/*   )} */}
       </div>
-      <div class="message-turn">
-        <h2>{userTurn ? "It's your turn!!" : "Wait...CPU is playing"}</h2>
+      <div class="message-turn text-center">
+        <h4>{userTurn ? "It's your turn!!" : "Wait...CPU is playing"}</h4>
       </div>
-      <div class="  justify-content-center">
+      <div class=" d-flex justify-content-center">
         <button
           component={Link}
           to="/"
           disabled={props.game_status === "pending"}
           type="button"
-          class="surrender-button btn start btn-danger btn-sm "
+          class="surrender-button btn start btn-danger "
           onClick={openModal}
         >
           SURRENDER
@@ -290,8 +277,7 @@ function Game(props) {
       </div>
       <SimpleModal
         surrender={props.onSurrenderGame}
-        title="YOU ARE SURRENDING THE GAME"
-        message="Are you sure?"
+        title="DO YOU WANT TO STOP PLAYING?"
         show={showModal}
         onClose={() => {
           setShowModal(false);

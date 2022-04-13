@@ -10,6 +10,7 @@ import Ships from "../../components/customs/Ships";
 import Form from "../../components/customs/Form";
 import { GiSinkingShip } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 const StartLayout = (props) => {
   const [ships, setShips] = useState();
@@ -20,7 +21,7 @@ const StartLayout = (props) => {
   const [activeShipId, setActiveShipId] = useState(1);
   const [disableStartButton, setDisableStartButton] = useState(true);
 
-  const navigate = useNavigate();
+  const navigation = useNavigate();
 
   //saves the redux user ships on the local state once.
   useEffect(() => {
@@ -54,7 +55,6 @@ const StartLayout = (props) => {
     setActiveShip(true);
     const selected_ship = ships.find((ship) => ship.id === ship_id);
     setCurrentShip(selected_ship);
-    console.log(currentShip);
   };
 
   //places the selected ship on the playing board
@@ -124,43 +124,45 @@ const StartLayout = (props) => {
       userName,
       gameStatus: "started",
     };
-    console.log("dataaaaaaaa", data);
+
     props.onStartGame(data);
-    navigate({ pathname: "/game" });
+    navigation({ pathname: "/game" });
   };
 
   return (
-    <div class=" container ">
-      <div class=" title d-flex justify-content-center ">
-        <div class="mx-5 my-3">
+    <div fluid class="container-fluid px-md-5">
+      <div class=" row-md container-fluid d-flex justify-content-center my-2 ">
+        <div class=" col-md-3 col-sm mx-2 text-center">
           <h1>BATTLESHIP GAME</h1>
         </div>
-        <div>
-          <GiSinkingShip class="big-icon" />
+        <div class="col-sm">
+          <GiSinkingShip size={30} />
         </div>
       </div>
-      <div class="grid">
-        <Grid
-          userCells={cells}
-          onClickGridAction={setShipOnGrid}
-          colorCell="table-primary"
-          gameStatus={props.game_status}
-        />
-      </div>
+      <div class="row-md row-sm">
+        <div class="col-md col-sm">
+          <Grid
+            userCells={cells}
+            onClickGridAction={setShipOnGrid}
+            colorCell="table-primary"
+            gameStatus={props.game_status}
+          />
+        </div>
 
-      <div class="settings">
-        <Ships
-          ships={ships}
-          selectShip={selectShip}
-          changeShipDirection={changeShipDirection}
-          activeShipId={activeShipId}
-        />
-        <Form
-          userName={userName}
-          handleChange={handleChange}
-          startPlaying={startPlaying}
-          disableStartButton={disableStartButton}
-        />
+        <div class="col-md col-sm">
+          <Ships
+            ships={ships}
+            selectShip={selectShip}
+            changeShipDirection={changeShipDirection}
+            activeShipId={activeShipId}
+          />
+          <Form
+            userName={userName}
+            handleChange={handleChange}
+            startPlaying={startPlaying}
+            disableStartButton={disableStartButton}
+          />
+        </div>
       </div>
     </div>
   );

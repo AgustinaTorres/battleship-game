@@ -1,19 +1,21 @@
 import React from "react";
 import "./Ships.css";
 import { GiCarrier } from "react-icons/gi";
-/* GiCruiser;
-GiSubmarine;
- */
+import { AiOutlineRotateRight } from "react-icons/ai";
+
 function Ships(props) {
   return (
     <div>
-      <div>
-        <h3 class="text-start ">
-          Select your ships and set them on the Grid...
-        </h3>
+      <div class="row-md row-sm ">
+        <h4 class=" mb-3 text-center">
+          Select and set your ships on the board
+        </h4>
       </div>
-      <div class="ship-actions d-flex col justify-content-between">
-        <div class="ships">
+      <div
+        class="row-md  
+        align-items-center col-sm "
+      >
+        <div class="col-md col-sm ">
           {props.ships && props.ships !== " "
             ? props.ships.map((ship, index) => {
                 return (
@@ -31,21 +33,22 @@ function Ships(props) {
                       onClick={() => props.selectShip(ship.id, index)}
                     >
                       <GiCarrier class="icon" />
-                      {ship.name + " " + ship.direction}
+                      {ship.name + "-" + ship.direction}
                     </button>
                   </div>
                 );
               })
             : null}
         </div>
-        <div class="row text-center align-items-center">
+
+        <div class="col-md col-sm text-center justify-content-center ">
+          <AiOutlineRotateRight size={70} />
           <button
             type="button"
             class="direction btn btn-secondary btn-sm mx-3 "
             onClick={() => props.changeShipDirection(props.activeShipId)}
           >
-            CHANGE SELECTED SHIP DIRECTION
-            {/*  {ship.direction === "x" ? "horizontal" : "vertical"} */}
+            Change ship direction
           </button>
         </div>
       </div>

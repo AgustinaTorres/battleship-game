@@ -2,8 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { GiTrophyCup } from "react-icons/gi";
 import { RiEmotionSadLine } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 function End(props) {
+  const navigation = useNavigate();
+
   return (
     <div class="container   text-center my-5">
       <h1 class="py-5">
@@ -27,7 +30,10 @@ function End(props) {
           disabled={props.disableStartButton}
           type="button"
           class="my-5 btn start btn-success btn-sm "
-          /* onClick={props.startPlaying} */
+          onClick={() => {
+            navigation({ pathname: "/" });
+            navigation(0);
+          }}
         >
           PLAY AGAIN
         </button>

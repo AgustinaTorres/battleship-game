@@ -15,20 +15,20 @@
 }
 
 .carrier {
-  width: 350px;
-  background-color: rgb(75, 90, 141);
+  width: 300px;
+  background-color: rgb(33, 79, 228);
   color: black;
 }
 
 .cruiser {
-  width: 250px;
-  background-color: rgb(176, 84, 56);
+  width: 240px;
+  background-color: rgb(33, 79, 228);
   color: black;
 }
 
 .submarine {
   width: 180px;
-  background-color: rgb(172, 173, 61);
+  background-color: rgb(33, 79, 228);
   color: black;
 }
 .direction {

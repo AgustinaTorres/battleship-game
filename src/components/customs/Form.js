@@ -3,9 +3,9 @@ import "./Form.css";
 
 function Form(props) {
   return (
-    <div class="form d-flex justify-content-center py-5 my-4">
+    <div class="row-md col-sm mt-4 d-flex justify-content-center ">
       <input
-        class="input text mx-5 "
+        class="row-md"
         placeholder="What's your Name?..."
         value={props.userName}
         onChange={props.handleChange}
@@ -14,7 +14,7 @@ function Form(props) {
       <button
         disabled={props.disableStartButton}
         type="button"
-        class="btn start btn-success btn-sm "
+        class="btn btn-success mx-2 row-md"
         onClick={props.startPlaying}
       >
         START PLAYING
